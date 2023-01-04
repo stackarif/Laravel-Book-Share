@@ -4,9 +4,9 @@
 
    <!-- Page Heading -->
    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Manage Authors</h1>
+    <h1 class="h3 mb-0 text-gray-800">Manage Publisher</h1>
 
-    <a href="#addModal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Add Authors</a>
+    <a href="#addModal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"><i class="fas fa-plus-circle fa-sm text-white-50"></i> Add publishers</a>
 
   </div>
   @include('backend.layouts.partials.messages')
@@ -16,26 +16,41 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add New Author</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add New Publisher</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
 
-          <form action="{{route('admin.authors.store')}}" method="POST">
+          <form action="{{route('admin.publishers.store')}}" method="POST">
             @csrf
             <div class="row">
-              <div class="col-12 mb-2">
-                <label for="">Author Name</label>
+              <div class="col-6 mb-2">
+                <label for="">Publisher Name</label>
                 <br>
-                <input type="text" class="form-control" name="name" placeholder="Author Name">
+                <input type="text" class="form-control" name="name" placeholder="">
+              </div>
+              <div class="col-6 mb-2">
+                <label for="">Publisher Link</label>
+                <br>
+                <input type="text" class="form-control" name="link" placeholder="">
+              </div>
+              <div class="col-6 mb-2">
+                <label for="">Publisher Address</label>
+                <br>
+                <input type="text" class="form-control" name="address" placeholder="">
+              </div>
+              <div class="col-6 mb-2">
+                <label for="">Publisher Outlet</label>
+                <br>
+                <input type="text" class="form-control" name="outlet" placeholder="">
               </div>
               
               <div class="col-12">
-                <label for="">Author Details</label>
+                <label for="">Publisher Details</label>
                 <br>
-                <textarea name="description" cols="30" rows="5" class="form-control" placeholder="Author description...."></textarea>
+                <textarea name="description" cols="30" rows="5" class="form-control" placeholder="Publisher details...."></textarea>
               </div>
             </div>
             <div class="mt-4">
@@ -57,7 +72,7 @@
     <div class="col-sm-12">
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Author List</h6>
+          <h6 class="m-0 font-weight-bold text-primary">publisher List</h6>
         </div>
         <div class="card-body">
           <table class="table" id="dataTable">
@@ -66,50 +81,69 @@
                 <th>Sl</th>
                 <th>Name</th>
                 <th>Link</th>
+                <th>Address</th>
+                <th>Outlet</th>
                 <th>Manage</th>
 
               </tr>
             </thead>
             <tbody>
-              @foreach ($authors as $author)
+              @foreach ($publishers as $publisher)
               <tr>
                 <td>{{$loop->iteration}}</td>
-                <td>{{$author->name}}</td>
-                <td>{{$author->link}}</td>
+                <td>{{$publisher->name}}</td>
+                <td>{{$publisher->link}}</td>
+                <td>{{$publisher->address}}</td>
+                <td>{{$publisher->outlet}}</td>
                 
                 <td>
-                  <a href="#editModal{{$author->id}}" class="btn btn-success" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>
-                  <a href="#deleteModal{{$author->id}}" class="btn btn-danger" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a>
+                  <a href="#editModal{{$publisher->id}}" class="btn btn-success" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>
+                  <a href="#deleteModal{{$publisher->id}}" class="btn btn-danger" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a>
                 </td>
 
               </tr>
 
                 <!--Edit Modal -->
-              <div class="modal fade" id="editModal{{$author->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="editModal{{$publisher->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Edit Author</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Edit publisher</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body">
 
-                      <form action="{{route('admin.authors.update', $author->id)}}" method="POST">
+                      <form action="{{route('admin.publishers.update', $publisher->id)}}" method="POST">
                         @csrf
                         <div class="row">
-                          <div class="col-12 mb-2">
-                            <label for="">Author Name</label>
-                            <br>
-                            <input type="text" class="form-control" name="name" value="{{$author->name}}" placeholder="Author Name">
-                          </div>
-                          
-                          <div class="col-12">
-                            <label for="">Author Details</label>
-                            <br>
-                            <textarea name="description" cols="30" rows="5" class="form-control" placeholder="Author description....">{!!$author->description!!}</textarea>
-                          </div>
+                            <div class="col-6 mb-2">
+                              <label for="">Publisher Name</label>
+                              <br>
+                              <input type="text" class="form-control" name="name" value="{{$publisher->name}}" placeholder="">
+                            </div>
+                            <div class="col-6 mb-2">
+                              <label for="">Publisher Link</label>
+                              <br>
+                              <input type="text" class="form-control" name="link" value="{{$publisher->link}}" placeholder="">
+                            </div>
+                            <div class="col-6 mb-2">
+                              <label for="">Publisher Address</label>
+                              <br>
+                              <input type="text" class="form-control" name="address" value="{{$publisher->address}}" placeholder="">
+                            </div>
+                            <div class="col-6 mb-2">
+                              <label for="">Publisher Outlet</label>
+                              <br>
+                              <input type="text" class="form-control" name="outlet" value="{{$publisher->outlet}}" placeholder="">
+                            </div>
+                            
+                            <div class="col-12">
+                              <label for="">Publisher Details</label>
+                              <br>
+                              <textarea name="description" cols="30" rows="5" class="form-control" placeholder="Publisher details....">{!!$publisher->description!!}"</textarea>
+                            </div>
                         </div>
                         <div class="mt-4">
                           <button type="submit" class="btn btn-primary">Update</button>
@@ -124,7 +158,7 @@
                 </div>
               </div>
                   <!--Edit Modal -->
-              <div class="modal fade" id="deleteModal{{$author->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="deleteModal{{$publisher->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -135,10 +169,10 @@
                     </div>
                     <div class="modal-body">
 
-                      <form action="{{route('admin.authors.delete', $author->id)}}" method="POST">
+                      <form action="{{route('admin.publishers.delete', $publisher->id)}}" method="POST">
                         @csrf
                         <div>
-                          {{$author->name}} will be deleted !!
+                          {{$publisher->name}} will be deleted !!
                         </div>
                         <div class="mt-4">
                           <button type="submit" class="btn btn-primary">Ok, Confirm</button>
@@ -153,30 +187,30 @@
                 </div>
               </div>
                 <!--Delet Modal -->
-              <div class="modal fade" id="deleteModal{{$author->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="deleteModal{{$publisher->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Author</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit publisher</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
   
-                        <form action="{{route('admin.authors.delete', $author->id)}}" method="POST">
+                        <form action="{{route('admin.publishers.delete', $publisher->id)}}" method="POST">
                           @csrf
                           <div class="row">
-                            <div class="col-12 mb-2">
-                              <label for="">Author Name</label>
+                            <div class="col-12">
+                              <label for="">publisher Name</label>
                               <br>
-                              <input type="text" class="form-control" name="name" value="{{$author->name}}" placeholder="Author Name">
+                              <input type="text" class="form-control" name="name" value="{{$publisher->name}}" placeholder="publisher Name">
                             </div>
                             
                             <div class="col-12">
-                              <label for="">Author Details</label>
+                              <label for="">publisher Details</label>
                               <br>
-                              <textarea name="description" cols="30" rows="5" class="form-control" placeholder="Author description....">{!!$author->description!!}</textarea>
+                              <textarea name="description" cols="30" rows="5" class="form-control" placeholder="publisher description....">{!!$publisher->description!!}</textarea>
                             </div>
                           </div>
                           <div class="mt-4">

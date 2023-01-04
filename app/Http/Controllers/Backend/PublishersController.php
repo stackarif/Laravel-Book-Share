@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
-use App\Models\Author;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
 
-class AuthorsController extends Controller
+class PublishersController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $authors = Author::all();
-        return view('backend.pages.authors.index', compact('authors'));
+        $publishers = Publisher::all();
+        return view('backend.pages.publishers.index', compact('publishers'));
     }
 
     /**
@@ -26,7 +26,7 @@ class AuthorsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    { 
         //
     }
 
@@ -40,15 +40,18 @@ class AuthorsController extends Controller
     {
         $request->validate([
             'name' => 'required|max:50',
+            'link' => 'nullable|url',
             'description' => 'nullable | min:5',
         ]);
 
-        $author= new Author();
-        $author->name = $request->name;
-        $author->link = Str::slug($request->name);
-        $author->description = $request->description;
-        $author->save();
-        session()->flash('success', 'Author has been created !!');
+        $publisher= new Publisher();
+        $publisher->name = $request->name;
+        $publisher->link = $request->link;
+        $publisher->address = $request->address;
+        $publisher->outlet = $request->outlet;
+        $publisher->description = $request->description;
+        $publisher->save();
+        session()->flash('success', 'Publisher has been created !!');
         return back();
 
 
@@ -87,16 +90,18 @@ class AuthorsController extends Controller
     {
         $request->validate([
             'name' => 'required|max:50',
+            'link' => 'nullable|url',
             'description' => 'nullable | min:5',
         ]);
 
-        $author= Author::find($id);
-        $author->name = $request->name;
-        // $author->link = Str::slug($request->name);
-        $author->description = $request->description;
-        $author->save();
-        session()->flash('success', 'Author has been updated !!');
-
+        $publisher= Publisher::find($id);
+        $publisher->name = $request->name;
+        // $publisher->link = $request->link;
+        $publisher->address = $request->address;
+        $publisher->outlet = $request->outlet;
+        $publisher->description = $request->description;
+        $publisher->save();
+        session()->flash('success', 'Publisher has been updated !!');
         return back();
     }
 
@@ -108,9 +113,9 @@ class AuthorsController extends Controller
      */
     public function destroy($id)
     {
-        $author= Author::find($id);
-        $author->delete();
-        session()->flash('success', 'Author has been deleted !!');
+        $publisher= Publisher::find($id);
+        $publisher->delete();
+        session()->flash('success', 'Publisher has been deleted !!');
 
         return back();
     }
