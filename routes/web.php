@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\AuthorsController;
 use App\Http\Controllers\Backend\BackendPagesController;
+use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\Backend\PublishersController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\PagesController;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[PagesController::class,'index'])->name('index');
 Route::get('/books',[BooksController::class,'index'])->name('books.index');
 Route::get('/books/single',[BooksController::class,'show'])->name('books.show');
+
+Route::get('books/categories/{slug}',[CategoriesController::class,'show'])->name('categories.show');
 
 //admin
 Route::group(['prefix'=> 'admin'], function(){

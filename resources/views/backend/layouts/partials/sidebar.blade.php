@@ -44,6 +44,12 @@
       </div>
     </li>
 
+    <li class="nav-item active">
+      <a class="nav-link" href="{{route('admin.index')}}">
+        <i class="fas fa-fw fa-sign-out"></i>
+        <span>Logout</span></a>
+    </li>`
+
     <!-- Nav Item - Utilities Collapse Menu -->
     {{-- <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
