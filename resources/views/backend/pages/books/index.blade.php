@@ -59,12 +59,12 @@
                 <td>
                     @if ($book->is_approved)
                     <span class="badge badge-success">
-                        <i class="fa fa-check"></i>Apprioved
+                        <i class="fa fa-check"></i>Approved
                          
                     </span>
                     @else
                     <span class="badge badge-danger">
-                        <i class="fa fa-times"></i>Not Apprioved
+                        <i class="fa fa-times"></i>Not Approved
                          
                     </span>
                         
@@ -72,7 +72,7 @@
                 </td>
                 
                 <td>
-                  <a href="#editModal{{$book->id}}" class="btn btn-success" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>
+                  <a href="{{route('admin.books.edit', $book->id)}}" class="btn btn-success" ><i class="fa fa-edit"></i> Edit</a>
                   <a href="#deleteModal{{$book->id}}" class="btn btn-danger" data-toggle="modal"><i class="fa fa-trash"></i> Delete</a>
                 </td>
 

@@ -35,7 +35,8 @@ class BooksController extends Controller
         $categories = Category::all();
         $publishers = Publisher::all();
         $authors = Author::all();
-        return view('backend.pages.books.create', compact('categories','publishers','authors'));
+        $books = Book::where('is_approved', 1)->get();
+        return view('backend.pages.books.create', compact('categories','publishers','authors','books'));
 
     }
 
@@ -53,6 +54,11 @@ class BooksController extends Controller
             'publisher_id' => 'required',
             'slug' => 'nullable|unique:books',
             'description' => 'nullable',
+            'image' => 'required| image|max:2048',
+        ],
+        [
+            'title.required' => 'Please enter book title',
+            'image.max' => 'Image size can not be greater than 2MB'
         ]);
 
         $books= new Book();
@@ -67,14 +73,32 @@ class BooksController extends Controller
         $books->publisher_id = $request->publisher_id;
         $books->publish_year = $request->publish_year;
         $books->description = $request->description;
+        $books->user_id = 1;
         $books->is_approved = 1;
+        $books->isbn = $request->isbn;
+        $books->translator_id = $request->translator_id;
         $books->save();
+        //image updload
+        if($request->image){
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $name = time().'-'.$books->id.'.'.$extension;
+            $path = "images/books";
+            $file->move($path, $name);
+            $books->image = $name;
+            $books->save();
+
+        }
 
         //Book Author
-        $book_author = new BookAuthor();
-        $book_author->book_id = $request->book_id;
-        $book_author->author_id = $request->author_id;
-        $book_author->save();
+        foreach($request->author_ids as $id){
+            $book_author = new BookAuthor();
+            $book_author->book_id = $books->id;
+            $book_author->author_id = $id;
+            $book_author->save();
+
+        }
+        
 
         session()->flash('success', 'Book has been created !!');
         return redirect()->route('admin.books.index');
@@ -101,7 +125,14 @@ class BooksController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::all();
+        $publishers = Publisher::all();
+        $authors = Author::all();
+        $books = Book::where('is_approved', 1)->where('id', '!=', $id )->get();
+        $book = Book::find($id);
+        return view('backend.pages.books.edit', compact('categories','publishers','authors','books','book'));
+        
+        
     }
 
     /**
@@ -113,26 +144,66 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $books= Book::find($id);
 
+        $books= Book::find($id);
         $request->validate([
-            'name' => 'required|max:50',
-            // 'slug' => 'nullable|unique:books,slug'.$books->id,
+            'title' => 'required|max:50',
+            'category_id' => 'required',
+            'publisher_id' => 'required',
+            'slug' => 'nullable|unique:books,slug,'.$books->id,
             'description' => 'nullable',
+            'image' => 'nullable| image|max:2048',
+        ],
+        [
+            'title.required' => 'Please enter book title',
+            'image.max' => 'Image size can not be greater than 2MB'
         ]);
 
-        $books->name = $request->name;
+        $books->title = $request->title; 
         if(empty($request->slug)){
-            $books->slug = Str::slug($request->name);
+            $books->slug = Str::slug($request->title);
 
         }else{
             $books->slug = $request->slug;
         }
-        $books->parent_id = $request->parent_id;
+        $books->category_id = $request->category_id;
+        $books->publisher_id = $request->publisher_id;
+        $books->publish_year = $request->publish_year;
         $books->description = $request->description;
+        // $books->user_id = 1;
+        // $books->is_approved = 1;
+        $books->isbn = $request->isbn;
+        $books->translator_id = $request->translator_id;
         $books->save();
-        session()->flash('success', 'Category has been created !!');
-        return back();
+        //image updload
+        if($request->image){
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $name = time().'-'.$books->id.'.'.$extension;
+            $path = "images/books";
+            $file->move($path, $name);
+            $books->image = $name;
+            $books->save();
+
+        }
+
+        //Book Author
+          //Delete firstly delete old authors table
+        $book_authors = BookAuthor::where('book_id', $books->id)->get(); 
+        foreach($book_authors as $author){
+            $author->delete();
+        }
+        foreach($request->author_ids as $id){
+            $book_author = new BookAuthor();
+            $book_author->book_id = $books->id;
+            $book_author->author_id = $id;
+            $book_author->save();
+
+        }
+        
+
+        session()->flash('success', 'Book has been Updated !!');
+        return redirect()->route('admin.books.index');
     }
 
     /**
